@@ -15,7 +15,7 @@ public class ProductoController {
     private List<Producto> listaProductos = new ArrayList<>();
 
     public ProductoController() {
-        // Datos iniciales de prueba (según SQL proporcionado)
+        // Datos iniciales de prueba
         listaProductos.add(new Producto(1, "Labial", "Labial rojo mate", 25000.0, 50));
         listaProductos.add(new Producto(2, "Base", "Base líquida tono medio", 45000.0, 30));
     }
