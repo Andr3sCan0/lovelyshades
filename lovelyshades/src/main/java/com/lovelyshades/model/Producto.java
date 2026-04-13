@@ -1,5 +1,6 @@
 package com.lovelyshades.model;
 
+feature/dao
 import java.math.BigDecimal;
 
 public class Producto {
@@ -14,6 +15,18 @@ public class Producto {
     }
 
     public Producto(Integer idProducto, String nombre, String descripcion, BigDecimal precio, Integer stock) {
+public class Producto {
+
+    private int idProducto;
+    private String nombre;
+    private String descripcion;
+    private double precio;
+    private int stock;
+
+    public Producto() {}
+
+    public Producto(int idProducto, String nombre, String descripcion, double precio, int stock) {
+  main
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -21,11 +34,19 @@ public class Producto {
         this.stock = stock;
     }
 
+    feature/dao
     public Integer getIdProducto() {
         return idProducto;
     }
 
     public void setIdProducto(Integer idProducto) {
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+main
         this.idProducto = idProducto;
     }
 
@@ -45,6 +66,7 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
+feature/dao
     public BigDecimal getPrecio() {
         return precio;
     }
@@ -58,6 +80,20 @@ public class Producto {
     }
 
     public void setStock(Integer stock) {
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+main
         this.stock = stock;
     }
 }
