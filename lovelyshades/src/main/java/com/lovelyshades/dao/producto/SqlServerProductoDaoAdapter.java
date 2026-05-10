@@ -111,7 +111,7 @@ public class SqlServerProductoDaoAdapter extends AbstractSqlServerDaoAdapter imp
     }
 
     @Override
-    public List<Producto> listarConStockBajo(int stockMinimo) {
+    public List<Producto> listarConStockBajo(Integer stockMinimo) {
         String sql = "SELECT id_producto, nombre, descripcion, precio, stock FROM productos WHERE stock < ?";
         List<Producto> productos = new ArrayList<>();
 
@@ -130,7 +130,7 @@ public class SqlServerProductoDaoAdapter extends AbstractSqlServerDaoAdapter imp
     }
 
     @Override
-    public boolean actualizarStock(int idProducto, int nuevoStock) {
+    public boolean actualizarStock(Integer idProducto, Integer nuevoStock) {
         String sql = "UPDATE productos SET stock = ? WHERE id_producto = ?";
 
         try (var connection = getConnection();

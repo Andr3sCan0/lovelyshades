@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductoDao extends BaseDao<Producto, Integer> {
 
-    List<Producto> listarConStockBajo(int stockMinimo);
+    List<Producto> listarConStockBajo(Integer stockMinimo);
 
-    boolean actualizarStock(int idProducto, int nuevoStock);
+    boolean actualizarStock(Integer idProducto, Integer nuevoStock);
 }

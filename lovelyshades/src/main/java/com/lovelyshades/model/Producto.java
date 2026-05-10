@@ -1,9 +1,15 @@
 package com.lovelyshades.model;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "producto")
 public class Producto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProducto;
     private String nombre;
     private String descripcion;
