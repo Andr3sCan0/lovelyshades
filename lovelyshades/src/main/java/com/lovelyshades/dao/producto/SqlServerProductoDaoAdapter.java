@@ -46,7 +46,6 @@ public class SqlServerProductoDaoAdapter extends AbstractSqlServerDaoAdapter imp
 
     @Override
     public Optional<Producto> buscarPorId(Integer id) {
-        System.out.println("asd");
         String sql = "SELECT id_producto, nombre, descripcion, precio, stock FROM productos WHERE id_producto = ?";
 
         try (var connection = getConnection();
