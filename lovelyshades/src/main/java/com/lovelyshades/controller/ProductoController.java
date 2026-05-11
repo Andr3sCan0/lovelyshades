@@ -1,59 +1,61 @@
 package com.lovelyshades.controller;
 
-import com.lovelyshades.dao.cliente.ClienteDao;
-import com.lovelyshades.dao.producto.ProductoDao;
 import com.lovelyshades.model.Producto;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lovelyshades.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/productos")
+@Tag(name = "Productos", description = "CRUD de productos usando SQL nativo (JDBC)")
 public class ProductoController {
 
+    // Inyectamos la INTERFAZ, no la clase concreta (SOLID)
+    private final ProductoService productoService;
 
-    @Autowired
-   private ProductoDao productoDao;
-    // GET - listar todos
+    public ProductoController(ProductoService productoService) {
+        this.productoService = productoService;
+    }
+
     @GetMapping
+    @Operation(summary = "Listar todos los productos")
     public List<Producto> listar() {
-        return productoDao.listarTodos();
+        return productoService.listarTodos();
     }
 
-    // GET - obtener por id
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener producto por ID")
     public Producto obtener(@PathVariable int id) {
-        return productoDao.buscarPorId(id).orElse(null);
+        return productoService.buscarPorId(id).orElse(null);
     }
 
-    // POST - crear producto
     @PostMapping
+    @Operation(summary = "Crear un nuevo producto")
     public Producto crear(@RequestBody Producto producto) {
-        productoDao.guardar(producto);
+        return productoService.guardar(producto);
+    }
+
+    @PutMapping
+    @Operation(summary = "Actualizar un producto existente")
+    public Producto actualizar(@RequestBody Producto producto) {
+        productoService.actualizar(producto);
         return producto;
     }
 
-    // PUT - actualizar producto
-    @PutMapping
-    public Producto actualizar(@RequestBody Producto producto) {
-        productoDao.actualizar(producto);
-        return null;
-    }
-
-    // DELETE - eliminar producto
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un producto por ID")
     public String eliminar(@PathVariable int id) {
-        productoDao.eliminar(id);
+        productoService.eliminar(id);
         return "Producto eliminado";
     }
 
-    // GET - Alarmas de bajo stock (stock < 10)
     @GetMapping("/bajo-stock")
+    @Operation(summary = "Listar productos con stock menor a 10 unidades")
     public List<Producto> obtenerBajoStock() {
-        return productoDao.listarConStockBajo(10);
+        return productoService.listarConStockBajo(10);
     }
 }

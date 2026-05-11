@@ -1,51 +1,55 @@
 package com.lovelyshades.controller;
 
-import com.lovelyshades.dao.cliente.ClienteDao;
 import com.lovelyshades.model.Cliente;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lovelyshades.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/clientes")
+@Tag(name = "Clientes", description = "CRUD de clientes usando SQL nativo (JDBC)")
 public class ClienteController {
 
-   @Autowired
-   private ClienteDao clienteDao;
-    // GET - listar todos
+    // Inyectamos la INTERFAZ, no la clase concreta (SOLID)
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
+
     @GetMapping
+    @Operation(summary = "Listar todos los clientes")
     public List<Cliente> listar() {
-        return clienteDao.listarTodos();
+        return clienteService.listarTodos();
     }
 
-    // GET - obtener por id
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener cliente por ID")
     public Cliente obtener(@PathVariable int id) {
-        return clienteDao.buscarPorId(id).orElse(null);
+        return clienteService.buscarPorId(id).orElse(null);
     }
 
-    // POST - crear cliente
     @PostMapping
+    @Operation(summary = "Crear un nuevo cliente")
     public Cliente crear(@RequestBody Cliente cliente) {
-        clienteDao.guardar(cliente);
-        return cliente;
+        return clienteService.guardar(cliente);
     }
 
-    // PUT - actualizar cliente
     @PutMapping
+    @Operation(summary = "Actualizar un cliente existente")
     public Cliente actualizar(@RequestBody Cliente cliente) {
-        clienteDao.actualizar(cliente);
+        clienteService.actualizar(cliente);
         return cliente;
-        
     }
 
-    // DELETE - eliminar cliente
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un cliente por ID")
     public String eliminar(@PathVariable int id) {
-        clienteDao.eliminar(id);
+        clienteService.eliminar(id);
         return "Cliente eliminado";
     }
 }
