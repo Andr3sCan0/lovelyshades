@@ -1,7 +1,7 @@
 package com.lovelyshades.controller;
 
 import com.lovelyshades.model.Cliente;
-import com.lovelyshades.service.ClienteService;
+import com.lovelyshades.service.cliente.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;

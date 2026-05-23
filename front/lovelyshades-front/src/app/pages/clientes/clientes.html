@@ -1,0 +1,145 @@
+<div class="clientes-container">
+
+  <!-- HEADER -->
+  <header class="clientes-header">
+    <h1>👥 Gestión de Clientes</h1>
+    <p>Administra y conoce mejor a tus clientes</p>
+  </header>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <h2 class="section-title">{{ editando ? '✏️ Editar Cliente' : '➕ Nuevo Cliente' }}</h2>
+    
+    <form (ngSubmit)="guardar()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre Completo</label>
+          <input
+            id="nombre"
+            type="text"
+            placeholder="Ej: María García López"
+            [(ngModel)]="cliente.nombre"
+            name="nombre"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="ejemplo@correo.com"
+            [(ngModel)]="cliente.email"
+            name="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input
+            id="telefono"
+            type="text"
+            placeholder="+57 123 456 7890"
+            [(ngModel)]="cliente.telefono"
+            name="telefono"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-guardar" type="submit">
+          {{ editando ? '✓ Actualizar' : '✓ Guardar' }}
+        </button>
+        <button
+          class="btn-limpiar"
+          type="button"
+          (click)="limpiarFormulario()"
+        >
+          🗑️ Limpiar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section">
+    <h2 class="section-title">🔍 Buscar Clientes</h2>
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="🔍 Buscar por nombre, correo o teléfono..."
+        [(ngModel)]="searchTerm"
+        (input)="onBusquedaChange()"
+        class="search-input"
+      >
+    </div>
+  </section>
+
+  <!-- CLIENTES DISPLAY -->
+  <section class="clientes-section">
+    <h2 class="section-title">📋 Clientes ({{ clientes.length }})</h2>
+
+    <!-- GRID VIEW -->
+    <div *ngIf="(clientesMostrados && clientesMostrados.length > 0)" class="clientes-grilla">
+      <div *ngFor="let c of clientesMostrados" class="cliente-card">
+        <div class="card-content">
+          <h3>{{ c.nombre }}</h3>
+          <div class="client-info">
+            <p><strong>📧</strong> {{ c.email }}</p>
+            <p><strong>📱</strong> {{ c.telefono }}</p>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn-editar" (click)="editar(c)">
+            ✏️ Editar
+          </button>
+          <button class="btn-eliminar" (click)="eliminar(c.idCliente)">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST VIEW TABLE -->
+    <div class="tabla-container">
+      <table class="clientes-tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of clientesMostrados">
+            <td class="id-cell">{{ c.idCliente }}</td>
+            <td class="nombre-cell">{{ c.nombre }}</td>
+            <td class="email-cell">{{ c.email }}</td>
+            <td class="telefono-cell">{{ c.telefono }}</td>
+            <td class="acciones-cell">
+              <button class="btn-editar" (click)="editar(c)">
+                ✏️ Editar
+              </button>
+              <button class="btn-eliminar" (click)="eliminar(c.idCliente)">
+                🗑️ Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="clientes.length === 0" class="empty-state">
+      <p class="empty-icon">👥</p>
+      <p>No hay clientes registrados aún.</p>
+    </div>
+  </section>
+
+</div>
