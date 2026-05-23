@@ -1,7 +1,7 @@
 package com.lovelyshades.controller;
 
 import com.lovelyshades.model.Producto;
-import com.lovelyshades.service.ProductoService;
+import com.lovelyshades.service.producto.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +39,11 @@ public class ProductoController {
         return productoService.guardar(producto);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Operation(summary = "Actualizar un producto existente")
-    public Producto actualizar(@RequestBody Producto producto) {
+    public Producto actualizar(@PathVariable Integer id,
+                               @RequestBody Producto producto) {
+        producto.setIdProducto(id);
         productoService.actualizar(producto);
         return producto;
     }

@@ -2,7 +2,7 @@ package com.lovelyshades.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lovelyshades.model.Cliente;
-import com.lovelyshades.service.ClienteService;
+import com.lovelyshades.service.cliente.ClienteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

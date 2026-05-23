@@ -1,0 +1,231 @@
+<div class="productos-container">
+
+  <!-- HEADER -->
+  <header class="productos-header">
+    <h1>💄 Gestión de Productos</h1>
+    <p>Administra tu catálogo de maquillaje premium</p>
+  </header>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <h2 class="section-title">{{ editando ? '✏️ Editar Producto' : '➕ Nuevo Producto' }}</h2>
+    
+    <form class="producto-form" (ngSubmit)="guardar()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre del Producto</label>
+          <input
+            id="nombre"
+            type="text"
+            placeholder="Ej: Labial Rojo Intenso"
+            [(ngModel)]="producto.nombre"
+            name="nombre"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio (COP)</label>
+          <input
+            id="precio"
+            type="number"
+            placeholder="0"
+            [(ngModel)]="producto.precio"
+            name="precio"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock</label>
+          <input
+            id="stock"
+            type="number"
+            placeholder="0"
+            [(ngModel)]="producto.stock"
+            name="stock"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          placeholder="Describe los detalles, ingredientes, etc."
+          [(ngModel)]="producto.descripcion"
+          name="descripcion"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-guardar" type="submit">
+          {{ editando ? '✓ Actualizar' : '✓ Guardar' }}
+        </button>
+        <button
+          class="btn-limpiar"
+          type="button"
+          (click)="limpiarFormulario()"
+        >
+          🗑️ Limpiar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- FILTERS & SEARCH -->
+  <section class="filters-section">
+    <h2 class="section-title">🔍 Buscar y Filtrar</h2>
+    
+    <div class="filters-container">
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="🔍 Buscar por nombre o descripción..."
+          [(ngModel)]="searchTerm"
+          (input)="onBusquedaChange()"
+          class="search-input"
+        >
+      </div>
+      
+      
+
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label for="precioMin">Precio Mínimo</label>
+          <input
+            id="precioMin"
+            type="number"
+            [(ngModel)]="precioMin"
+            (change)="onFiltroChange()"
+          >
+        </div>
+
+        <div class="filter-group">
+          <label for="precioMax">Precio Máximo</label>
+          <input
+            id="precioMax"
+            type="number"
+            [(ngModel)]="precioMax"
+            (change)="onFiltroChange()"
+          >
+        </div>
+
+        <div class="filter-group">
+          <label for="ordenar">Ordenar Por</label>
+          <select
+            id="ordenar"
+            [(ngModel)]="ordenarPor"
+            (change)="onFiltroChange()"
+          >
+            <option value="nombre">Nombre (A-Z)</option>
+            <option value="precio-asc">Precio (Menor a Mayor)</option>
+            <option value="precio-desc">Precio (Mayor a Menor)</option>
+            <option value="stock">Stock Disponible</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Vista</label>
+          <button class="btn-vista" (click)="toggleVista()">
+            {{ vistaGrilla ? '📊 Cambiar a Lista' : '🎯 Cambiar a Grilla' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS DISPLAY -->
+  <section class="productos-section">
+    <h2 class="section-title">📦 Productos ({{ productosMostrados.length }})</h2>
+
+    <!-- GRID VIEW -->
+    <div *ngIf="vistaGrilla && productosMostrados.length > 0" class="productos-grilla">
+      <div *ngFor="let p of productosMostrados" class="producto-card">
+        <div class="card-header">
+          <h3>{{ p.nombre }}</h3>
+          <span class="badge" [class.low-stock]="p.stock < 10">
+            {{ p.stock }} en stock
+          </span>
+        </div>
+
+        <p class="descripcion">{{ p.descripcion }}</p>
+
+        <div class="card-footer">
+          <div class="precio">
+            {{ p.precio | currency:'COP':'symbol':'1.0-0' }}
+          </div>
+          <div class="acciones">
+            <button
+              class="btn-editar"
+              (click)="editar(p)"
+              title="Editar"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn-eliminar"
+              (click)="eliminar(p.idProducto)"
+              title="Eliminar"
+            >
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST VIEW -->
+    <div *ngIf="!vistaGrilla && productosMostrados.length > 0" class="tabla-container">
+      <table class="productos-tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of productosMostrados" [class.low-stock-row]="p.stock < 10">
+            <td class="id-cell">{{ p.idProducto }}</td>
+            <td class="nombre-cell"><strong>{{ p.nombre }}</strong></td>
+            <td class="desc-cell">{{ p.descripcion }}</td>
+            <td class="precio-cell">{{ p.precio | currency:'COP':'symbol':'1.0-0' }}</td>
+            <td class="stock-cell">
+              <span [class.stock-bajo]="p.stock < 10">
+                {{ p.stock }}
+              </span>
+            </td>
+            <td class="acciones-cell">
+              <button
+                class="btn-editar"
+                (click)="editar(p)"
+              >
+                ✏️ Editar
+              </button>
+              <button
+                class="btn-eliminar"
+                (click)="eliminar(p.idProducto)"
+              >
+                🗑️ Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="productosMostrados.length === 0" class="empty-state">
+      <p class="empty-icon">📭</p>
+      <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+    </div>
+  </section>
+
+</div>

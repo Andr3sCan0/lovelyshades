@@ -1,4 +1,4 @@
-package com.lovelyshades.service;
+package com.lovelyshades.service.cliente;
 
 import com.lovelyshades.model.Cliente;
 

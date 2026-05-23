@@ -1,10 +1,20 @@
 package com.lovelyshades.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "cliente")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cliente")
     private Integer idCliente;
+    @Column(name = "nombre")
     private String nombre;
+    @Column(name = "telefono")
     private String telefono;
+    @Column(name = "email")
     private String email;
 
     public Cliente() {
