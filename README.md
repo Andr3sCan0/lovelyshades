@@ -29,43 +29,143 @@ Objetivos Específicos
 • Implantar el sistema en el entorno de producción, capacitar a los usuarios, entregar la documentación y garantizar la transición al proceso de soporte y mantenimiento.
 
 ----------------------------------------------------------------------------------------
-Configuración de Base de Datos y Conexión (DAO)
-Requisitos
--SQL Server, Java JDK 11 o superior
+# LovelyShades Backend
 
-1. Restaurar Base de Datos
--Abrir SQL Server Management Studio
--Click derecho en **Databases → Restore Database**
--Seleccionar el archivo `.bak o` proporcionado
--Nombrar la base de datos como: "lovelyshades"
+## Descripción
 
+Backend desarrollado con Spring Boot, Spring Data JPA y SQL Server para la gestión de clientes, productos, facturas, detalle de facturas e inventario.
 
-2.Configuración de Conexión
-La conexión a la base de datos se gestiona mediante la clase: "SqlServerConnectionProvider.java", esta clase utiliza JDBC para conectarse a SQL Server.
-2.1 Parámetros de conexión:
--Servidor: "localhost"
--Puerto: "1433"
--Base de datos: "lovelyshades"
--Usuario: "sa" (o el configurado)
--Contraseña: (según instalación local)
+Actualmente los módulos implementados son:
 
-3. Arquitectura DAO
-El proyecto implementa el patrón *DAO + Adapter*, donde:
-"Dao" → define las operaciones (interfaces)
-"SqlServer Adapter" → implementa las consultas SQL
-"ConnectionProvider" → centraliza la conexión a la BD
+* Cliente
+* Producto
+* Factura
+* DetalleFactura
+* Inventario
 
+La documentación de la API está disponible mediante Swagger.
 
-4 Funcionamiento
--El sistema solicita datos (ej: productos)
--Se utiliza un DAO (ej: "ProductoDao")
--El Adapter ejecuta consultas SQL
--La conexión se obtiene desde "connectionProvider"
--Se devuelven los datos al sistema
+---
 
+## Requisitos
 
-5. Prueba de funcionamiento Para validar la conexión:
--Ejecutar el proyecto
--Verificar que no existan errores de conexión
--Consultar datos desde la interfaz o endpoints
+* Java 21
+* SQL Server
+* Maven (o Maven Wrapper incluido en el proyecto)
+* Git
 
+---
+
+## Configuración de la Base de Datos
+
+### 1. Eliminar la base de datos anterior
+
+Debido a la migración a JPA, la estructura anterior de la base de datos ya no es compatible con la implementación actual.
+
+Eliminar la base de datos existente.
+
+### 2. Crear una nueva base de datos vacía
+
+Ejemplo:
+
+```sql
+CREATE DATABASE lovelyshades;
+```
+
+Importante:
+
+* No ejecutar scripts de creación de tablas.
+* No ejecutar scripts antiguos del proyecto.
+
+Las tablas serán generadas automáticamente por JPA.
+
+---
+
+## Configuración de conexión
+
+Editar el archivo:
+
+```text
+src/main/resources/application-dev.properties
+```
+
+Configurar los datos de conexión según la instalación local:
+
+```properties
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=lovelyshades;encrypt=true;trustServerCertificate=true
+spring.datasource.username=sa
+spring.datasource.password=TU_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=update
+```
+
+---
+
+## Ejecutar el proyecto
+
+Desde la carpeta del backend:
+
+Windows:
+
+```powershell
+.\mvnw spring-boot:run
+```
+
+Linux/Mac:
+
+```bash
+./mvnw spring-boot:run
+```
+
+---
+
+## Swagger
+
+Una vez iniciado el backend:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+---
+
+## Endpoints disponibles
+
+### Clientes
+
+```text
+/api/clientes
+```
+
+### Productos
+
+```text
+/api/productos
+```
+
+### Facturas
+
+```text
+/api/facturas
+```
+
+### Detalle Factura
+
+```text
+/api/detalle-facturas
+```
+
+### Inventario
+
+```text
+/api/inventarios
+```
+
+---
+
+## Notas
+
+* El backend fue migrado a Spring Data JPA.
+* Las entidades actuales generan automáticamente la estructura de la base de datos.
+* Los scripts SQL adicionales (índices, vistas, procedimientos almacenados y triggers) pueden volver a integrarse posteriormente si son necesarios.
+* Swagger debe utilizarse para validar y probar los endpoints durante el desarrollo.
