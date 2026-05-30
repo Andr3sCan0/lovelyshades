@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.math.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "DetalleFactura")
 public class DetalleFactura {
@@ -15,6 +17,7 @@ public class DetalleFactura {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_factura", nullable = false)
+    @JsonIgnore
     private Factura factura;
 
     @ManyToOne(optional = false)
