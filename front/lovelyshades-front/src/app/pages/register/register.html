@@ -1,0 +1,81 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <h1>Regístrate en LovelyShades</h1>
+    <p>Completa tus datos y comienza a disfrutar de la aplicación.</p>
+
+    <form #registerForm="ngForm" (ngSubmit)="register()" class="auth-form">
+      <label>
+        Nombre completo
+        <input
+          type="text"
+          [(ngModel)]="nombre"
+          name="nombre"
+          placeholder="Tu nombre"
+          required
+          #nombreField="ngModel"
+        />
+        <div class="field-error" *ngIf="nombreField.invalid && nombreField.touched">
+          <span>El nombre es obligatorio.</span>
+        </div>
+      </label>
+
+      <label>
+        Correo
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="correo@ejemplo.com"
+          required
+          email
+          #emailField="ngModel"
+        />
+        <div class="field-error" *ngIf="emailField.invalid && emailField.touched">
+          <span *ngIf="emailField.errors?.['required']">El correo es obligatorio.</span>
+          <span *ngIf="emailField.errors?.['email']">Ingresa un correo válido.</span>
+        </div>
+      </label>
+
+      <label>
+        Contraseña
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          minlength="6"
+          #passwordField="ngModel"
+        />
+        <div class="field-error" *ngIf="passwordField.invalid && passwordField.touched">
+          <span *ngIf="passwordField.errors?.['required']">La contraseña es obligatoria.</span>
+          <span *ngIf="passwordField.errors?.['minlength']">Debe tener al menos 6 caracteres.</span>
+        </div>
+      </label>
+
+      <label>
+        Confirmar contraseña
+        <input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="Repite la contraseña"
+          required
+          minlength="6"
+          #confirmPasswordField="ngModel"
+        />
+        <div class="field-error" *ngIf="confirmPasswordField.invalid && confirmPasswordField.touched">
+          <span *ngIf="confirmPasswordField.errors?.['required']">Confirma la contraseña.</span>
+          <span *ngIf="confirmPasswordField.errors?.['minlength']">Debe tener al menos 6 caracteres.</span>
+        </div>
+      </label>
+
+      <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">Crear cuenta</button>
+    </form>
+
+    <div class="auth-actions">
+      <span>¿Ya tienes cuenta?</span>
+      <a routerLink="/login">Inicia sesión aquí</a>
+    </div>
+  </div>
+</div>

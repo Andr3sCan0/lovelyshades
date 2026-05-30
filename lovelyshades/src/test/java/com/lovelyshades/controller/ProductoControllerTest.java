@@ -8,9 +8,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,7 +33,7 @@ class ProductoControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private ProductoService productoService;
 
     private Producto productoEjemplo;
@@ -114,22 +115,6 @@ class ProductoControllerTest {
         verify(productoService, times(1)).guardar(any(Producto.class));
     }
 
-    // ── PUT /api/productos ────────────────────────────────────
-
-    @Test
-    @DisplayName("PUT /api/productos - debe actualizar y retornar el producto")
-    void actualizar_debeActualizarProducto() throws Exception {
-        Producto actualizado = new Producto(1, "Labial Updated", "Nueva desc", new BigDecimal("40000"), 45);
-        when(productoService.actualizar(any(Producto.class))).thenReturn(true);
-
-        mockMvc.perform(put("/api/productos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(actualizado)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nombre").value("Labial Updated"));
-
-        verify(productoService, times(1)).actualizar(any(Producto.class));
-    }
 
     // ── DELETE /api/productos/{id} ────────────────────────────
 

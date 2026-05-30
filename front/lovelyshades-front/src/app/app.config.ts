@@ -1,14 +1,17 @@
 import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { jwtInterceptor } from './interceptors/jwt-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), provideHttpClient(withFetch()),
-    importProvidersFrom(FormsModule), provideClientHydration(withEventReplay())
+    provideRouter(routes),
+    provideHttpClient(withFetch(), withInterceptors([jwtInterceptor])),
+    importProvidersFrom(FormsModule),
+    provideClientHydration(withEventReplay())
   ]
 };

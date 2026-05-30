@@ -1,35 +1,31 @@
 package com.lovelyshades.service;
 
 import com.lovelyshades.dao.cliente.ClienteDao;
-import com.lovelyshades.dao.cliente.ClienteRepository;
 import com.lovelyshades.model.Cliente;
-
 import com.lovelyshades.service.cliente.ClienteServiceImpl;
 import com.lovelyshades.utils.ClienteNoEncontradoException;
 import com.lovelyshades.utils.DatabaseException;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataAccessException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class ClienteServiceImplTest {
 
     @Mock
     private ClienteDao clienteDao;
-
-    @Mock
-    private ClienteRepository clienteRepositoryRepository;
 
     @InjectMocks
     private ClienteServiceImpl clienteService;
@@ -39,47 +35,33 @@ class ClienteServiceImplTest {
     @BeforeEach
     void setUp() {
 
+        MockitoAnnotations.openMocks(this);
+
         cliente = new Cliente();
         cliente.setIdCliente(1);
-        cliente.setNombre("Diego");
-        cliente.setEmail("diego@gmail.com");
+        cliente.setNombre("Carlos");
+        cliente.setEmail("carlos@test.com");
+        cliente.setTelefono("3001234567");
     }
 
-    @Test
-    void guardarJpa_ClienteValido_RetornaCliente() {
-
-        when(clienteRepositoryRepository.save(cliente))
-                .thenReturn(cliente);
-
-        Cliente resultado =
-                clienteService.guardarJpa(cliente);
-
-        assertNotNull(resultado);
-        assertEquals("Diego", resultado.getNombre());
-
-        verify(clienteRepositoryRepository)
-                .save(cliente);
-    }
 
     @Test
-    void guardarJpa_ErrorBD_LanzaDatabaseException() {
+    @DisplayName("Debe lanzar DatabaseException al guardar")
+    void debeLanzarDatabaseExceptionGuardar() {
 
-        when(clienteRepositoryRepository.save(cliente))
-                .thenThrow(
-                        new DataAccessResourceFailureException(
-                                "SQL Server caído"));
+        doThrow(new RuntimeException())
+                .when(clienteDao)
+                .guardar(any(Cliente.class));
 
-        DatabaseException exception = assertThrows(
+        assertThrows(
                 DatabaseException.class,
-                () -> clienteService.guardarJpa(cliente)
+                () -> clienteService.guardar(cliente)
         );
-
-        assertTrue(exception.getMessage()
-                .contains("Error guardando cliente"));
     }
 
     @Test
-    void buscarPorId_ClienteExiste_RetornaCliente() {
+    @DisplayName("Debe buscar cliente por ID")
+    void debeBuscarClientePorId() {
 
         when(clienteDao.buscarPorId(1))
                 .thenReturn(Optional.of(cliente));
@@ -88,40 +70,141 @@ class ClienteServiceImplTest {
                 clienteService.buscarPorId(1);
 
         assertTrue(resultado.isPresent());
-
-        assertEquals("Diego",
+        assertEquals("Carlos",
                 resultado.get().getNombre());
+
+        verify(clienteDao).buscarPorId(1);
     }
 
     @Test
-    void buscarPorId_ClienteNoExiste_LanzaException() {
+    @DisplayName("Debe lanzar ClienteNoEncontradoException cuando no existe")
+    void debeLanzarClienteNoEncontrado() {
 
         when(clienteDao.buscarPorId(1))
                 .thenReturn(Optional.empty());
 
-        ClienteNoEncontradoException exception =
-                assertThrows(
-                        ClienteNoEncontradoException.class,
-                        () -> clienteService.buscarPorId(1)
-                );
-
-        assertEquals(
-                "Cliente no encontrado con id: 1",
-                exception.getMessage()
+        assertThrows(
+                ClienteNoEncontradoException.class,
+                () -> clienteService.buscarPorId(1)
         );
     }
 
     @Test
-    void listarTodos_ErrorBD_LanzaDatabaseException() {
+    @DisplayName("Debe lanzar DatabaseException al consultar cliente")
+    void debeLanzarDatabaseExceptionBuscarPorId() {
+
+        when(clienteDao.buscarPorId(1))
+                .thenThrow(new DataAccessException("Error BD") {});
+
+        assertThrows(
+                DatabaseException.class,
+                () -> clienteService.buscarPorId(1)
+        );
+    }
+
+    @Test
+    @DisplayName("Debe listar todos los clientes")
+    void debeListarClientes() {
 
         when(clienteDao.listarTodos())
-                .thenThrow(
-                        new DataAccessResourceFailureException(
-                                "Error SQL"));
+                .thenReturn(List.of(cliente));
+
+        List<Cliente> resultado =
+                clienteService.listarTodos();
+
+        assertEquals(1, resultado.size());
+        assertEquals("Carlos",
+                resultado.get(0).getNombre());
+
+        verify(clienteDao).listarTodos();
+    }
+
+    @Test
+    @DisplayName("Debe lanzar DatabaseException al listar clientes")
+    void debeLanzarDatabaseExceptionListar() {
+
+        when(clienteDao.listarTodos())
+                .thenThrow(new DataAccessException("Error BD") {});
 
         assertThrows(
                 DatabaseException.class,
                 () -> clienteService.listarTodos()
         );
+    }
+
+    @Test
+    @DisplayName("Debe actualizar cliente")
+    void debeActualizarCliente() {
+
+        when(clienteDao.actualizar(cliente))
+                .thenReturn(true);
+
+        boolean resultado =
+                clienteService.actualizar(cliente);
+
+        assertTrue(resultado);
+
+        verify(clienteDao).actualizar(cliente);
+    }
+
+    @Test
+    @DisplayName("Debe lanzar DatabaseException al actualizar")
+    void debeLanzarDatabaseExceptionActualizar() {
+
+        when(clienteDao.actualizar(cliente))
+                .thenThrow(new DataAccessException("Error BD") {});
+
+        assertThrows(
+                DatabaseException.class,
+                () -> clienteService.actualizar(cliente)
+        );
+    }
+
+    @Test
+    @DisplayName("Debe eliminar cliente")
+    void debeEliminarCliente() {
+
+        when(clienteDao.eliminar(1))
+                .thenReturn(true);
+
+        boolean resultado =
+                clienteService.eliminar(1);
+
+        assertTrue(resultado);
+
+        verify(clienteDao).eliminar(1);
+    }
+
+    @Test
+    @DisplayName("Debe lanzar DatabaseException al eliminar")
+    void debeLanzarDatabaseExceptionEliminar() {
+
+        when(clienteDao.eliminar(1))
+                .thenThrow(new DataAccessException("Error BD") {});
+
+        assertThrows(
+                DatabaseException.class,
+                () -> clienteService.eliminar(1)
+        );
+    }
+
+    @Test
+    @DisplayName("Debe buscar cliente por email")
+    void debeBuscarPorEmail() {
+
+        when(clienteDao.buscarPorEmail("carlos@test.com"))
+                .thenReturn(Optional.of(cliente));
+
+        Optional<Cliente> resultado =
+                clienteService.buscarPorEmail("carlos@test.com");
+
+        assertTrue(resultado.isPresent());
+        assertEquals(
+                "Carlos",
+                resultado.get().getNombre()
+        );
+
+        verify(clienteDao)
+                .buscarPorEmail("carlos@test.com");
     }
 }

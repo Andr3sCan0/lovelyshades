@@ -1,0 +1,78 @@
+<div class="usuarios-editar-container">
+  <div class="header">
+    <h1>Gestionar Roles de Usuarios</h1>
+    <p>Cambiar el rol de los usuarios registrados (Solo para administradores)</p>
+  </div>
+
+  <div class="usuarios-list">
+    <h2>Usuarios Registrados</h2>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre de Usuario</th>
+            <th>Correo</th>
+            <th>Rol Actual</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>{{ usuario.idUsuario }}</td>
+            <td>{{ usuario.nombreUsuario }}</td>
+            <td>{{ usuario.email }}</td>
+            <td><span class="badge">{{ usuario.rol?.nombreRol }}</span></td>
+            <td>
+              <span class="badge" [ngClass]="usuario.estado ? 'active' : 'inactive'">
+                {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button (click)="seleccionarUsuario(usuario)" class="btn btn-sm btn-primary">
+                Cambiar Rol
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="modal-overlay" (click)="cerrarFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Cambiar Rol de Usuario</h2>
+        <button class="close-btn" (click)="cerrarFormulario()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="usuario-info" *ngIf="usuarioSeleccionado">
+          <p><strong>Usuario:</strong> {{ usuarioSeleccionado.nombreUsuario }}</p>
+          <p><strong>Correo:</strong> {{ usuarioSeleccionado.email }}</p>
+          <p><strong>Rol Actual:</strong> {{ usuarioSeleccionado.rol?.nombreRol }}</p>
+        </div>
+
+        <form (ngSubmit)="guardarCambios()">
+          <label>
+            Nuevo Rol
+            <select [(ngModel)]="nuevoRol" name="rol" required>
+              <option [ngValue]="null" disabled>Selecciona un rol</option>
+              <option *ngFor="let rol of roles" [ngValue]="rol.idRol">
+                {{ rol.nombreRol }}
+              </option>
+            </select>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="cerrarFormulario()">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

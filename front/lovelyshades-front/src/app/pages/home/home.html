@@ -1,37 +1,31 @@
 
 <div class="landing-container">
-
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="navbar-content">
-      <div class="logo">
-        <span class="logo-icon">💄</span>
-        <span>LovelyShades</span>
-      </div>
-      <nav class="nav-menu">
-        <a href="#features" class="nav-link">Características</a>
-        <a routerLink="/productos" class="nav-link">Productos</a>
-        <a routerLink="/clientes" class="nav-link">Clientes</a>
-        <a href="#testimonios" class="nav-link">Testimonios</a>
-        <button class="btn-primary">Iniciar Sesión</button>
-      </nav>
-    </div>
-  </header>
-
   <!-- HERO SECTION -->
   <section class="hero">
     <div class="hero-content">
       <div class="hero-text">
         <h1 class="hero-title">Resalta Tu Belleza Natural ✨</h1>
         <p class="hero-subtitle">Maquillaje premium, tonos exclusivos y productos diseñados para hacerte brillar cada día. Descubre tu color perfecto.</p>
-        
+
         <div class="hero-buttons">
           <button routerLink="/productos" class="btn-primary-lg">Explorar Productos</button>
           <button routerLink="/productos-jpa" class="btn-primary-lg">Explorar Productos JPA</button>
           <button routerLink="/clientes" class="btn-secondary-lg">Gestionar Clientes</button>
         </div>
+
+        <div class="hero-cta">
+          <ng-container *ngIf="isLoggedIn(); else guestCta">
+            <button routerLink="/perfil" class="btn-secondary-lg">Ir a mi cuenta</button>
+            <p>Bienvenido de nuevo, puedes revisar tu perfil o gestionar tu catálogo.</p>
+          </ng-container>
+          <ng-template #guestCta>
+            <p>Inicia sesión o regístrate para administrar tus productos y clientes.</p>
+            <button routerLink="/login" class="btn-secondary-lg">Iniciar sesión</button>
+            <button routerLink="/registro" class="btn-secondary-lg">Regístrate</button>
+          </ng-template>
+        </div>
       </div>
-      
+
       <div class="hero-image">
         <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800" alt="Maquillaje Premium">
       </div>

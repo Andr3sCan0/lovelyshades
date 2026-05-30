@@ -1,0 +1,88 @@
+<div class="roles-container">
+  <div class="header">
+    <h1>Gestión de Roles</h1>
+    <button (click)="abrirFormulario()" class="btn btn-primary">Crear Rol</button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="formulario">
+    <h2>{{ editando ? 'Editar Rol' : 'Crear Rol' }}</h2>
+    <form>
+      <div class="form-group">
+        <label>Nombre del Rol</label>
+        <input 
+          type="text" 
+          [(ngModel)]="rolActual.nombreRol"
+          name="nombreRol"
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input 
+            type="checkbox" 
+            [(ngModel)]="rolActual.estado"
+            name="estado">
+          Activo
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="guardar()" class="btn btn-success">Guardar</button>
+        <button type="button" (click)="cancelar()" class="btn btn-secondary">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="mostrarPermisosFormulario && rolSeleccionado" class="gestor-permisos">
+    <h2>Gestionar Permisos - {{ rolSeleccionado.nombreRol }}</h2>
+    
+    <div class="permisos-layout">
+      <div class="permisos-disponibles">
+        <h3>Permisos Disponibles</h3>
+        <ul>
+          <li *ngFor="let permiso of permisosDisponibles">
+            <span>{{ permiso.nombrePermiso }}</span>
+            <button (click)="asignarPermiso(permiso)" class="btn btn-sm btn-success">+</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="permisos-asignados">
+        <h3>Permisos Asignados</h3>
+        <ul>
+          <li *ngFor="let permiso of permisosDelRol">
+            <span>{{ permiso.nombrePermiso }}</span>
+            <button (click)="removerPermiso(permiso)" class="btn btn-sm btn-danger">-</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <button (click)="cerrarGestorPermisos()" class="btn btn-secondary">Cerrar</button>
+  </div>
+
+  <div class="tabla-container">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rol of roles">
+          <td>{{ rol.idRol }}</td>
+          <td>{{ rol.nombreRol }}</td>
+          <td>{{ rol.estado ? 'Activo' : 'Inactivo' }}</td>
+          <td>
+            <button (click)="editar(rol)" class="btn btn-sm btn-info">Editar</button>
+            <button (click)="abrirGestorPermisos(rol)" class="btn btn-sm btn-warning">Permisos</button>
+            <button (click)="eliminar(rol.idRol)" class="btn btn-sm btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
