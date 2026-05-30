@@ -64,19 +64,19 @@ public Inventario crear(
 
     @Operation(summary = "Buscar movimiento por ID", description = "Obtiene un movimiento de inventario por su identificador")
     @GetMapping("/{id}")
-    public Inventario obtenerPorId(@PathVariable Long id) {
+    public Inventario obtenerPorId(@PathVariable Integer id) {
         return inventarioService.obtenerPorId(id);
     }
 
     @Operation(summary = "Actualizar movimiento de inventario", description = "Actualiza la información de un movimiento existente")
     @PutMapping("/{id}")
-    public Inventario actualizar(@PathVariable Long id, @Valid @RequestBody Inventario inventario) {
+    public Inventario actualizar(@PathVariable Integer id, @Valid @RequestBody Inventario inventario) {
         return inventarioService.actualizar(id, inventario);
     }
 
     @Operation(summary = "Eliminar movimiento de inventario", description = "Elimina un movimiento de inventario por su identificador")
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Integer id) {
         inventarioService.eliminar(id);
     }
 }

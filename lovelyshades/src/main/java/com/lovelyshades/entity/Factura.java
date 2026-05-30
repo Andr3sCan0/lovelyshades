@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "factura")
+@Table(name = "Factura")
 public class Factura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_factura")
-    private Long idFactura;
+    private Integer idFactura;
+
+    @Column(name = "numero_factura", nullable = false, length = 50)
+    private String numeroFactura;
 
     @Column(name = "fecha", nullable = false)
     private LocalDateTime fecha = LocalDateTime.now();
@@ -22,31 +25,45 @@ public class Factura {
     @Column(name = "subtotal", nullable = false, precision = 12, scale = 2)
     private BigDecimal subtotal = BigDecimal.ZERO;
 
-    @Column(name = "impuesto", nullable = false, precision = 12, scale = 2)
+    @Column(name = "descuento", nullable = false, precision = 10, scale = 2)
+    private BigDecimal descuento = BigDecimal.ZERO;
+
+    @Column(name = "iva", nullable = false, precision = 12, scale = 2)
     private BigDecimal impuesto = BigDecimal.ZERO;
 
     @Column(name = "total", nullable = false, precision = 12, scale = 2)
     private BigDecimal total = BigDecimal.ZERO;
 
-    @Column(name = "estado", nullable = false, length = 30)
+    @Column(name = "estado_factura", nullable = false, length = 30)
     private String estado = "PAGADA";
+
+    @Column(name = "medio_pago", nullable = false, length = 20)
+    private String medioPago;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
     @Column(name = "id_usuario", nullable = false)
-    private Long idUsuario;
+    private Integer idUsuario;
 
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleFactura> detalles = new ArrayList<>();
 
-    public Long getIdFactura() {
+    public Integer getIdFactura() {
         return idFactura;
     }
 
-    public void setIdFactura(Long idFactura) {
+    public void setIdFactura(Integer idFactura) {
         this.idFactura = idFactura;
+    }
+
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 
     public LocalDateTime getFecha() {
@@ -63,6 +80,14 @@ public class Factura {
 
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
     }
 
     public BigDecimal getImpuesto() {
@@ -89,6 +114,14 @@ public class Factura {
         this.estado = estado;
     }
 
+    public String getMedioPago() {
+        return medioPago;
+    }
+
+    public void setMedioPago(String medioPago) {
+        this.medioPago = medioPago;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -97,11 +130,11 @@ public class Factura {
         this.cliente = cliente;
     }
 
-    public Long getIdUsuario() {
+    public Integer getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Long idUsuario) {
+    public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
 

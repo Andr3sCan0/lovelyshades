@@ -18,9 +18,13 @@ export class ClientesComponent implements OnInit {
   clientesMostrados: Cliente[] = [];
 
   cliente: Cliente = {
-    nombre: '',
+    nombreCompleto: '',
+    tipoIdentificacion: '',
+    numeroIdentificacion: '',
+    telefono: '',
     email: '',
-    telefono: ''
+    direccion: '',
+    estado: true
   };
 
   editando = false;
@@ -48,17 +52,23 @@ export class ClientesComponent implements OnInit {
 
     this.clientesMostrados = this.clientes.filter(c => {
       const searchLower = this.searchTerm.toLowerCase();
-      return c.nombre.toLowerCase().includes(searchLower) ||
+      return c.nombreCompleto.toLowerCase().includes(searchLower) ||
              c.email.toLowerCase().includes(searchLower) ||
-             c.telefono.includes(this.searchTerm);
+             c.telefono.includes(this.searchTerm) ||
+             c.tipoIdentificacion.toLowerCase().includes(searchLower) ||
+             c.numeroIdentificacion.toLowerCase().includes(searchLower) ||
+             c.direccion.toLowerCase().includes(searchLower);
     });
   }
 
   guardar(): void {
     if (
-      !this.cliente.nombre.trim() ||
+      !this.cliente.nombreCompleto.trim() ||
+      !this.cliente.tipoIdentificacion.trim() ||
+      !this.cliente.numeroIdentificacion.trim() ||
       !this.cliente.email.trim() ||
-      !this.cliente.telefono.trim()
+      !this.cliente.telefono.trim() ||
+      !this.cliente.direccion.trim()
     ) {
       alert('Todos los campos son obligatorios');
       return;
@@ -101,9 +111,13 @@ export class ClientesComponent implements OnInit {
 
   limpiarFormulario(): void {
     this.cliente = {
-      nombre: '',
+      nombreCompleto: '',
+      tipoIdentificacion: '',
+      numeroIdentificacion: '',
+      telefono: '',
       email: '',
-      telefono: ''
+      direccion: '',
+      estado: true
     };
     this.editando = false;
   }

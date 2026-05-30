@@ -62,7 +62,7 @@ public Producto crear(@Valid @org.springframework.web.bind.annotation.RequestBod
             description = "Obtiene un producto usando su identificador"
     )
     @GetMapping("/{id}")
-    public Producto obtenerPorId(@PathVariable Long id) {
+    public Producto obtenerPorId(@PathVariable Integer id) {
         return productoService.obtenerPorId(id);
     }
 
@@ -72,7 +72,7 @@ public Producto crear(@Valid @org.springframework.web.bind.annotation.RequestBod
     )
     @PutMapping("/{id}")
     public Producto actualizar(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @Valid @RequestBody Producto producto
     ) {
         return productoService.actualizar(id, producto);
@@ -83,7 +83,7 @@ public Producto crear(@Valid @org.springframework.web.bind.annotation.RequestBod
             description = "Elimina un producto por su identificador"
     )
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Integer id) {
         productoService.eliminar(id);
     }
 }

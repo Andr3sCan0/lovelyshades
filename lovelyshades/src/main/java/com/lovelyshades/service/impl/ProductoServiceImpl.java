@@ -12,7 +12,7 @@ public class ProductoServiceImpl extends AbstractCrudService<Producto> implement
     }
 
     @Override
-    public Producto actualizar(Long id, Producto source) {
+    public Producto actualizar(Integer id, Producto source) {
         Producto target = obtenerPorId(id);
         target.setNombre(source.getNombre()); target.setDescripcion(source.getDescripcion()); target.setPrecio(source.getPrecio()); target.setStock(source.getStock()); target.setEstado(source.getEstado());
         return repository.save(target);

@@ -13,16 +13,20 @@ public class InventarioServiceImpl extends AbstractCrudService<Inventario> imple
     }
 
     @Override
-    public Inventario actualizar(Long id, Inventario source) {
+    public Inventario actualizar(Integer id, Inventario source) {
         Inventario target = obtenerPorId(id);
 
         target.setProducto(source.getProducto());
+        target.setStockAntes(source.getStockAntes());
+        target.setStockDespues(source.getStockDespues());
+        target.setFechaMovimiento(source.getFechaMovimiento());
         target.setIdUsuario(source.getIdUsuario());
         target.setFactura(source.getFactura());
+        target.setServicio(source.getServicio());
         target.setTipoMovimiento(source.getTipoMovimiento());
         target.setCantidad(source.getCantidad());
-        target.setFecha(source.getFecha());
-        target.setObservacion(source.getObservacion());
+        target.setMotivo(source.getMotivo());
+        target.setObservaciones(source.getObservaciones());
 
         return repository.save(target);
     }

@@ -1,0 +1,70 @@
+<div class="permisos-container">
+  <div class="header">
+    <h1>Gestión de Permisos</h1>
+    <button (click)="abrirFormulario()" class="btn btn-primary">Crear Permiso</button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="formulario">
+    <h2>{{ editando ? 'Editar Permiso' : 'Crear Permiso' }}</h2>
+    <form>
+      <div class="form-group">
+        <label>Nombre del Permiso</label>
+        <input 
+          type="text" 
+          [(ngModel)]="permisoActual.nombrePermiso"
+          name="nombrePermiso"
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea 
+          [(ngModel)]="permisoActual.descripcion"
+          name="descripcion"
+          class="form-control"
+          rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input 
+            type="checkbox" 
+            [(ngModel)]="permisoActual.estado"
+            name="estado">
+          Activo
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button (click)="guardar()" class="btn btn-success">Guardar</button>
+        <button (click)="cancelar()" class="btn btn-secondary">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="tabla-container">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del Permiso</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let permiso of permisos">
+          <td>{{ permiso.idPermiso }}</td>
+          <td>{{ permiso.nombrePermiso }}</td>
+          <td>{{ permiso.descripcion || '-' }}</td>
+          <td>{{ permiso.estado ? 'Activo' : 'Inactivo' }}</td>
+          <td>
+            <button (click)="editar(permiso)" class="btn btn-sm btn-info">Editar</button>
+            <button (click)="eliminar(permiso.idPermiso)" class="btn btn-sm btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

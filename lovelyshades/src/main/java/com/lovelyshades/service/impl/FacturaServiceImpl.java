@@ -13,7 +13,7 @@ public class FacturaServiceImpl extends AbstractCrudService<Factura> implements 
     }
 
     @Override
-    public Factura actualizar(Long id, Factura source) {
+    public Factura actualizar(Integer id, Factura source) {
         Factura target = obtenerPorId(id);
 
         target.setFecha(source.getFecha());

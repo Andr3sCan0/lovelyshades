@@ -1,0 +1,5 @@
+<div class="toast-container" *ngIf="toastService.message()">
+  <div class="toast-box" [ngClass]="toastService.type()">
+    {{ toastService.message() }}
+  </div>
+</div>

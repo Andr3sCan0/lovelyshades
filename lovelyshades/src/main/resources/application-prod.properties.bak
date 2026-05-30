@@ -1,6 +1,6 @@
 # =============================================
 # PERFIL: prod
-# Base de datos SQL Server para producción
+# Base de datos SQL Server para producciÃ³n
 # =============================================
 
 spring.application.name=lovelyshades

@@ -1,2 +1,33 @@
+<header class="navbar">
+  <div class="logo">LovelyShades</div>
+  <div class="user-greeting" *ngIf="authService.isLoggedIn()">Hola, {{ authService.obtenerNombre() }}</div>
 
-<router-outlet></router-outlet>
+  <nav>
+    <a routerLink="/">Inicio</a>
+    <a routerLink="/clientes">Clientes</a>
+    <a routerLink="/productos">Productos</a>
+    <a routerLink="/productos-jpa">Productos JPA</a>
+    <a routerLink="/facturas" *ngIf="authService.isLoggedIn()">Facturas</a>
+    <a routerLink="/inventario" *ngIf="authService.isLoggedIn()">Inventario</a>
+    <ng-container *ngIf="authService.isLoggedIn(); else guestLinks">
+      <a routerLink="/perfil">Mi cuenta</a>
+      <a routerLink="/admin/categorias" *ngIf="isAdmin()">Categorias</a>
+      <a routerLink="/admin/marcas" *ngIf="isAdmin()">Marcas</a>
+      <a routerLink="/admin/roles" *ngIf="isAdmin()">Gestionar Roles</a>
+      <a routerLink="/admin/usuarios-editar" *ngIf="isAdmin()">Editar Usuarios</a>
+      <button class="login-btn" (click)="logout()">Salir</button>
+    </ng-container>
+    <ng-template #guestLinks>
+      <button class="login-btn" (click)="openLoginModal()">Entrar</button>
+      <button class="login-btn" (click)="openRegisterModal()">Registro</button>
+    </ng-template>
+  </nav>
+</header>
+
+<app-toast></app-toast>
+
+<app-modal-container></app-modal-container>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

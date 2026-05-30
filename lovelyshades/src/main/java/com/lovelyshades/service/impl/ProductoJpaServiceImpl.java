@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 @Service
-public class ProductoJpaServiceImpl implements ProductoJpaService {
+class ProductoJpaServiceImpl implements ProductoJpaService {
 
     // Inyectamos la interfaz, no la implementación concreta (SOLID - DIP)
     private final ProductoJpaRepository productoJpaRepository;

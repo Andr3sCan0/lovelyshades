@@ -18,8 +18,29 @@
             id="nombre"
             type="text"
             placeholder="Ej: María García López"
-            [(ngModel)]="cliente.nombre"
-            name="nombre"
+            [(ngModel)]="cliente.nombreCompleto"
+            name="nombreCompleto"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="tipoIdentificacion">Tipo de Identificación</label>
+          <select id="tipoIdentificacion" [(ngModel)]="cliente.tipoIdentificacion" name="tipoIdentificacion" required>
+            <option value="">Seleccione...</option>
+            <option value="CC">Cédula (CC)</option>
+            <option value="Pasaporte">Pasaporte</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="numeroIdentificacion">Número de Identificación</label>
+          <input
+            id="numeroIdentificacion"
+            type="text"
+            placeholder="Ej: 1234567890"
+            [(ngModel)]="cliente.numeroIdentificacion"
+            name="numeroIdentificacion"
             required
           >
         </div>
@@ -46,6 +67,30 @@
             name="telefono"
             required
           >
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input
+            id="direccion"
+            type="text"
+            placeholder="Ej: Calle 123 #45-67"
+            [(ngModel)]="cliente.direccion"
+            name="direccion"
+            required
+          >
+        </div>
+
+        <div class="form-group form-group-full">
+          <label class="checkbox-label">
+            <input
+              id="estado"
+              type="checkbox"
+              [(ngModel)]="cliente.estado"
+              name="estado"
+            >
+            Cliente activo
+          </label>
         </div>
       </div>
 
@@ -86,12 +131,15 @@
     <div *ngIf="(clientesMostrados && clientesMostrados.length > 0)" class="clientes-grilla">
       <div *ngFor="let c of clientesMostrados" class="cliente-card">
         <div class="card-content">
-          <h3>{{ c.nombre }}</h3>
-          <div class="client-info">
-            <p><strong>📧</strong> {{ c.email }}</p>
-            <p><strong>📱</strong> {{ c.telefono }}</p>
+            <h3>{{ c.nombreCompleto }}</h3>
+            <div class="client-info">
+              <p><strong>🪪</strong> {{ c.tipoIdentificacion }} - {{ c.numeroIdentificacion }}</p>
+              <p><strong>📧</strong> {{ c.email }}</p>
+              <p><strong>📱</strong> {{ c.telefono }}</p>
+              <p><strong>🏠</strong> {{ c.direccion }}</p>
+              <p><strong>Status:</strong> {{ c.estado ? 'Activo' : 'Inactivo' }}</p>
+            </div>
           </div>
-        </div>
 
         <div class="card-footer">
           <button class="btn-editar" (click)="editar(c)">
@@ -111,17 +159,23 @@
           <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Identificación</th>
             <th>Correo</th>
             <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let c of clientesMostrados">
             <td class="id-cell">{{ c.idCliente }}</td>
-            <td class="nombre-cell">{{ c.nombre }}</td>
+            <td class="nombre-cell">{{ c.nombreCompleto }}</td>
+            <td class="identificacion-cell">{{ c.tipoIdentificacion }} - {{ c.numeroIdentificacion }}</td>
             <td class="email-cell">{{ c.email }}</td>
             <td class="telefono-cell">{{ c.telefono }}</td>
+            <td class="direccion-cell">{{ c.direccion }}</td>
+            <td class="estado-cell">{{ c.estado ? 'Activo' : 'Inactivo' }}</td>
             <td class="acciones-cell">
               <button class="btn-editar" (click)="editar(c)">
                 ✏️ Editar

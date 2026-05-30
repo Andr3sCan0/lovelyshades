@@ -25,7 +25,7 @@ export class ClienteService {
   }
 
   actualizar(cliente: Cliente): Observable<Cliente> {
-    return this.http.put<Cliente>(this.apiUrl, cliente);
+    return this.http.put<Cliente>(`${this.apiUrl}/${cliente.idCliente}`, cliente);
   }
 
   eliminar(id: number): Observable<any> {

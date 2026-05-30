@@ -36,7 +36,7 @@ public class ClienteController {
                                   "tipoIdentificacion": "CC",
                                   "numeroIdentificacion": "1234567890",
                                   "telefono": "3001234567",
-                                  "correo": "laura@gmail.com",
+                                  "email": "laura@gmail.com",
                                   "direccion": "Calle 123",
                                   "estado": true
                                 }
@@ -61,19 +61,19 @@ public Cliente crear(
 
     @Operation(summary = "Buscar cliente por ID", description = "Obtiene un cliente usando su identificador")
     @GetMapping("/{id}")
-    public Cliente obtenerPorId(@PathVariable Long id) {
+    public Cliente obtenerPorId(@PathVariable Integer id) {
         return clienteService.obtenerPorId(id);
     }
 
     @Operation(summary = "Actualizar cliente", description = "Actualiza la información de un cliente existente")
     @PutMapping("/{id}")
-    public Cliente actualizar(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
+    public Cliente actualizar(@PathVariable Integer id, @Valid @RequestBody Cliente cliente) {
         return clienteService.actualizar(id, cliente);
     }
 
     @Operation(summary = "Eliminar cliente", description = "Elimina un cliente por su identificador")
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Integer id) {
         clienteService.eliminar(id);
     }
 }

@@ -31,8 +31,8 @@ public class Cliente {
     private String telefono;
 
     @Email
-    @Column(name = "correo", length = 100)
-    private String correo;
+    @Column(name = "email", length = 100)
+    private String email;
 
     @Column(name = "direccion", length = 200)
     private String direccion;
@@ -42,6 +42,16 @@ public class Cliente {
 
     @Column(name = "estado", nullable = false)
     private Boolean estado = true;
+
+    public Cliente() {
+    }
+
+    public Cliente(Integer idCliente, String nombreCompleto, String telefono, String email) {
+        this.idCliente = idCliente;
+        this.nombreCompleto = nombreCompleto;
+        this.telefono = telefono;
+        this.email = email;
+    }
 
     public Integer getIdCliente() { return idCliente; }
     public void setIdCliente(Integer idCliente) { this.idCliente = idCliente; }
@@ -58,8 +68,8 @@ public class Cliente {
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }

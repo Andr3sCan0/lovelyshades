@@ -1,0 +1,22 @@
+<div class="profile-page">
+  <div class="profile-card">
+    <h1>Mi cuenta</h1>
+    <p class="profile-subtitle">Información de usuario autenticado.</p>
+
+    <div class="profile-info">
+      <div class="info-row">
+        <span class="info-label">Nombre:</span>
+        <span class="info-value">{{ user?.nombreUsuario ?? user?.nombre ?? user?.name ?? 'No disponible' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Correo:</span>
+        <span class="info-value">{{ user?.email ?? 'No disponible' }}</span>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="submit-btn" (click)="logout()">Cerrar sesión</button>
+      <a routerLink="/" class="link-secondary">Volver al inicio</a>
+    </div>
+  </div>
+</div>

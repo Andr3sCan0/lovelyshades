@@ -13,14 +13,14 @@ public class ClienteServiceImpl extends AbstractCrudService<Cliente> implements 
     }
 
     @Override
-    public Cliente actualizar(Long id, Cliente source) {
+    public Cliente actualizar(Integer id, Cliente source) {
         Cliente target = obtenerPorId(id);
 
         target.setNombreCompleto(source.getNombreCompleto());
         target.setTipoIdentificacion(source.getTipoIdentificacion());
         target.setNumeroIdentificacion(source.getNumeroIdentificacion());
         target.setTelefono(source.getTelefono());
-        target.setCorreo(source.getCorreo());
+        target.setEmail(source.getEmail());
         target.setDireccion(source.getDireccion());
         target.setFechaRegistro(source.getFechaRegistro());
         target.setEstado(source.getEstado());

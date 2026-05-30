@@ -1,0 +1,223 @@
+<div class="facturas-container">
+
+  <!-- HEADER -->
+  <header class="facturas-header">
+    <h1>📄 Gestión de Facturas</h1>
+    <p>Crea y administra facturas de venta</p>
+  </header>
+
+  <!-- FORM SECTION -->
+  <section class="form-section" *ngIf="!editando">
+    <h2 class="section-title">➕ Nueva Factura</h2>
+    
+    <div class="form-wrapper">
+      <!-- Cliente Selection -->
+      <div class="form-group">
+        <label for="cliente">Cliente *</label>
+        <select id="cliente" [(ngModel)]="factura.idCliente" name="cliente" required>
+          <option [value]="0">-- Selecciona un cliente --</option>
+          <option *ngFor="let c of clientes" [value]="c.idCliente">
+            {{ c.nombreCompleto }} - {{ c.numeroIdentificacion }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Número de Factura (autogenerado) -->
+      <div class="form-group">
+        <label for="numeroFactura">Número de Factura</label>
+        <input
+          id="numeroFactura"
+          type="text"
+          [(ngModel)]="factura.numeroFactura"
+          name="numeroFactura"
+          disabled
+          readonly
+        >
+      </div>
+
+      <!-- Medio de Pago -->
+      <div class="form-group">
+        <label for="medioPago">Medio de Pago *</label>
+        <select id="medioPago" [(ngModel)]="factura.medioPago" name="medioPago" required>
+          <option value="">-- Selecciona --</option>
+          <option value="EFECTIVO">Efectivo</option>
+          <option value="TARJETA">Tarjeta de Crédito</option>
+          <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+          <option value="CHEQUE">Cheque</option>
+        </select>
+      </div>
+
+      <!-- Descuento -->
+      <div class="form-group">
+        <label for="descuento">Descuento</label>
+        <input
+          id="descuento"
+          type="number"
+          placeholder="0"
+          [(ngModel)]="factura.descuento"
+          name="descuento"
+          (change)="calcularTotales()"
+        >
+      </div>
+    </div>
+
+    <!-- Products Section -->
+    <div class="productos-section">
+      <h3>📦 Productos en la Factura</h3>
+      
+      <div class="form-wrapper">
+        <div class="form-group">
+          <label for="producto">Selecciona Producto *</label>
+          <select id="producto" (change)="seleccionarProducto($event)" name="producto">
+            <option [value]="0">-- Selecciona un producto --</option>
+            <option *ngFor="let p of productos" [value]="p.idProducto">
+              {{ p.nombre }} - ${{ p.valorVenta || p.precio }} (Stock: {{ p.stock }})
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="cantidad">Cantidad *</label>
+          <input
+            id="cantidad"
+            type="number"
+            placeholder="1"
+            [(ngModel)]="detalleActual.cantidad"
+            name="cantidad"
+            min="1"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="precioUnitario">Precio Unitario</label>
+          <input
+            id="precioUnitario"
+            type="number"
+            placeholder="0"
+            [(ngModel)]="detalleActual.precioUnitario"
+            name="precioUnitario"
+            readonly
+          >
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="agregarDetalle()">
+          ➕ Agregar Producto
+        </button>
+      </div>
+
+      <!-- Detalles agregados -->
+      <div class="detalles-list" *ngIf="detalles && detalles.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unit.</th>
+              <th>Subtotal</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detalle of detalles; let i = index">
+              <td>{{ getNombreProducto(detalle.idProducto) }}</td>
+              <td>{{ detalle.cantidad }}</td>
+              <td>${{ detalle.precioUnitario | number: '1.2-2' }}</td>
+              <td>${{ detalle.subtotal | number: '1.2-2' }}</td>
+              <td>
+                <button type="button" class="btn-delete" (click)="eliminarDetalle(i)">
+                  🗑️ Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Totales -->
+        <div class="totales">
+          <div class="total-item">
+            <span>Subtotal:</span>
+            <span>${{ factura.subtotal | number: '1.2-2' }}</span>
+          </div>
+          <div class="total-item">
+            <span>IVA (19%):</span>
+            <span>${{ factura.impuesto | number: '1.2-2' }}</span>
+          </div>
+          <div class="total-item">
+            <span>Descuento:</span>
+            <span>${{ (factura.descuento || 0) | number: '1.2-2' }}</span>
+          </div>
+          <div class="total-item total">
+            <span>Total:</span>
+            <span>${{ factura.total | number: '1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="buttons-group">
+      <button type="button" class="btn-primary" (click)="guardar()">
+        ✅ Guardar Factura
+      </button>
+      <button type="button" class="btn-secondary" (click)="limpiarFormulario()">
+        🔄 Limpiar
+      </button>
+    </div>
+  </section>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section">
+    <h2 class="section-title">🔍 Mis Facturas</h2>
+    <input
+      type="text"
+      placeholder="Buscar por número de factura..."
+      [(ngModel)]="searchTerm"
+      (input)="aplicarFiltros()"
+      class="search-input"
+    >
+  </section>
+
+  <!-- LIST SECTION -->
+  <section class="list-section">
+    <div class="table-wrapper" *ngIf="facturasMostradas.length > 0; else noData">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Número Factura</th>
+            <th>Cliente</th>
+            <th>Subtotal</th>
+            <th>IVA</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let f of facturasMostradas">
+            <td>{{ f.numeroFactura }}</td>
+            <td>{{ getNombreCliente(f) }}</td>
+            <td>${{ f.subtotal | number: '1.2-2' }}</td>
+            <td>${{ f.impuesto | number: '1.2-2' }}</td>
+            <td><strong>${{ f.total | number: '1.2-2' }}</strong></td>
+            <td>
+              <span [class]="'estado-' + (f.estado || 'PENDIENTE')">
+                {{ f.estado || 'PENDIENTE' }}
+              </span>
+            </td>
+            <td class="actions">
+              <button type="button" class="btn-edit" (click)="editar(f)">✏️</button>
+              <button type="button" class="btn-delete" (click)="eliminar(f.idFactura)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noData>
+      <div class="no-data-message">
+        <p>No hay facturas registradas aún.</p>
+      </div>
+    </ng-template>
+  </section>
+
+</div>

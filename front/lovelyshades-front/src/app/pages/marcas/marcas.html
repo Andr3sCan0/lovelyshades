@@ -1,0 +1,109 @@
+<div class="marcas-container">
+
+  <!-- HEADER -->
+  <header class="marcas-header">
+    <h1>🏷️ Gestion de Marcas</h1>
+    <p>Administra las marcas de productos</p>
+  </header>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <h2 class="section-title">{{ editando ? '✏️ Editar Marca' : '➕ Nueva Marca' }}</h2>
+    
+    <form (ngSubmit)="guardar()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombreMarca">Nombre de la Marca</label>
+          <input
+            id="nombreMarca"
+            type="text"
+            placeholder="Ej: Clinique"
+            [(ngModel)]="marca.nombreMarca"
+            name="nombreMarca"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input
+              id="estado"
+              type="checkbox"
+              [(ngModel)]="marca.estado"
+              name="estado"
+            >
+            Marca activa
+          </label>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-guardar" type="submit">
+          {{ editando ? '✓ Actualizar' : '✓ Guardar' }}
+        </button>
+        <button
+          class="btn-limpiar"
+          type="button"
+          (click)="limpiarFormulario()"
+        >
+          🗑️ Limpiar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section">
+    <h2 class="section-title">🔍 Buscar Marcas</h2>
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="🔍 Buscar por nombre..."
+        [(ngModel)]="searchTerm"
+        (input)="onBusquedaChange()"
+        class="search-input"
+      >
+    </div>
+  </section>
+
+  <!-- MARCAS DISPLAY -->
+  <section class="marcas-section">
+    <h2 class="section-title">📋 Marcas ({{ marcas.length }})</h2>
+
+    <!-- TABLE VIEW -->
+    <div class="tabla-container">
+      <table class="marcas-tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of marcasMostradas">
+            <td class="id-cell">{{ m.idMarca }}</td>
+            <td class="nombre-cell">{{ m.nombreMarca }}</td>
+            <td class="estado-cell">{{ m.estado ? 'Activa' : 'Inactiva' }}</td>
+            <td class="acciones-cell">
+              <button class="btn-editar" (click)="editar(m)">
+                ✏️ Editar
+              </button>
+              <button class="btn-eliminar" (click)="eliminar(m.idMarca)">
+                🗑️ Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="marcas.length === 0" class="empty-state">
+      <p class="empty-icon">🏷️</p>
+      <p>No hay marcas registradas aun.</p>
+    </div>
+  </section>
+
+</div>

@@ -37,6 +37,28 @@
         </div>
 
         <div class="form-group">
+          <label for="valorCosto">Valor Costo (COP)</label>
+          <input
+            id="valorCosto"
+            type="number"
+            placeholder="0"
+            [(ngModel)]="producto.valorCosto"
+            name="valorCosto"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="valorVenta">Valor Venta (COP)</label>
+          <input
+            id="valorVenta"
+            type="number"
+            placeholder="0"
+            [(ngModel)]="producto.valorVenta"
+            name="valorVenta"
+          >
+        </div>
+
+        <div class="form-group">
           <label for="stock">Stock</label>
           <input
             id="stock"
@@ -46,6 +68,45 @@
             name="stock"
             required
           >
+        </div>
+
+        <div class="form-group form-group-full">
+          <label class="checkbox-label">
+            <input
+              id="estado"
+              type="checkbox"
+              [(ngModel)]="producto.estado"
+              name="estado"
+            >
+            Producto activo
+          </label>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="codigoInterno">Código Interno</label>
+          <input id="codigoInterno" type="text" [(ngModel)]="producto.codigoInterno" name="codigoInterno">
+        </div>
+
+        <div class="form-group">
+          <label for="color">Color</label>
+          <input id="color" type="text" [(ngModel)]="producto.color" name="color">
+        </div>
+
+        <div class="form-group">
+          <label for="idMarca">Marca (ID)</label>
+          <input id="idMarca" type="number" [(ngModel)]="producto.idMarca" name="idMarca">
+        </div>
+
+        <div class="form-group">
+          <label for="idCategoria">Categoría (ID)</label>
+          <input id="idCategoria" type="number" [(ngModel)]="producto.idCategoria" name="idCategoria">
+        </div>
+
+        <div class="form-group">
+          <label for="fechaIngreso">Fecha Ingreso</label>
+          <input id="fechaIngreso" type="date" [(ngModel)]="producto.fechaIngreso" name="fechaIngreso">
         </div>
       </div>
 
@@ -154,9 +215,19 @@
 
         <p class="descripcion">{{ p.descripcion }}</p>
 
+        <div class="meta">
+          <small>Código: {{ p.codigoInterno || '—' }}</small>
+          <small>Color: {{ p.color || '—' }}</small>
+          <small>Marca ID: {{ p.idMarca || '—' }}</small>
+          <small>Categoría ID: {{ p.idCategoria || '—' }}</small>
+        </div>
+
         <div class="card-footer">
           <div class="precio">
             {{ p.precio | currency:'COP':'symbol':'1.0-0' }}
+            <span class="estado-badge" [class.inactivo]="!p.estado">
+              {{ p.estado ? 'Activo' : 'Inactivo' }}
+            </span>
           </div>
           <div class="acciones">
             <button
@@ -187,7 +258,14 @@
             <th>Producto</th>
             <th>Descripción</th>
             <th>Precio</th>
+            <th>Valor Costo</th>
+            <th>Valor Venta</th>
             <th>Stock</th>
+            <th>Estado</th>
+            <th>Código</th>
+            <th>Color</th>
+            <th>Marca ID</th>
+            <th>Categoría ID</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -197,11 +275,18 @@
             <td class="nombre-cell"><strong>{{ p.nombre }}</strong></td>
             <td class="desc-cell">{{ p.descripcion }}</td>
             <td class="precio-cell">{{ p.precio | currency:'COP':'symbol':'1.0-0' }}</td>
+            <td class="valor-costo-cell">{{ p.valorCosto | currency:'COP':'symbol':'1.0-0' }}</td>
+            <td class="valor-venta-cell">{{ p.valorVenta | currency:'COP':'symbol':'1.0-0' }}</td>
             <td class="stock-cell">
               <span [class.stock-bajo]="p.stock < 10">
                 {{ p.stock }}
               </span>
             </td>
+            <td class="estado-cell">{{ p.estado ? 'Activo' : 'Inactivo' }}</td>
+            <td class="codigo-cell">{{ p.codigoInterno }}</td>
+            <td class="color-cell">{{ p.color }}</td>
+            <td class="marca-cell">{{ p.idMarca }}</td>
+            <td class="categoria-cell">{{ p.idCategoria }}</td>
             <td class="acciones-cell">
               <button
                 class="btn-editar"

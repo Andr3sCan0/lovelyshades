@@ -69,7 +69,7 @@ public class DetalleFacturaController {
             description = "Obtiene un detalle de factura usando su identificador"
     )
     @GetMapping("/{id}")
-    public DetalleFactura obtenerPorId(@PathVariable Long id) {
+    public DetalleFactura obtenerPorId(@PathVariable Integer id) {
         return detalleFacturaService.obtenerPorId(id);
     }
 
@@ -99,7 +99,7 @@ public class DetalleFacturaController {
     )
     @PutMapping("/{id}")
     public DetalleFactura actualizar(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @Valid
             @org.springframework.web.bind.annotation.RequestBody DetalleFactura detalleFactura
     ) {
@@ -111,7 +111,7 @@ public class DetalleFacturaController {
             description = "Elimina un detalle de factura por su identificador"
     )
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Integer id) {
         detalleFacturaService.eliminar(id);
     }
 }

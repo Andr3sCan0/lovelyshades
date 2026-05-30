@@ -1,0 +1,183 @@
+<div class="inventario-container">
+
+  <!-- HEADER -->
+  <header class="inventario-header">
+    <h1>📦 Gestión de Inventario</h1>
+    <p>Controla los movimientos de stock de productos</p>
+  </header>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <h2 class="section-title">{{ editando ? '✏️ Editar Movimiento' : '➕ Nuevo Movimiento de Inventario' }}</h2>
+    
+    <form (ngSubmit)="guardar()">
+      <div class="form-wrapper">
+        <!-- Producto -->
+        <div class="form-group">
+          <label for="producto">Producto *</label>
+          <select 
+            id="producto" 
+            [(ngModel)]="inventario.idProducto" 
+            name="producto" 
+            (change)="seleccionarProducto($event)"
+            required
+          >
+            <option [value]="0">-- Selecciona un producto --</option>
+            <option *ngFor="let p of productos" [value]="p.idProducto">
+              {{ p.nombre }} (Stock: {{ p.stock }})
+            </option>
+          </select>
+        </div>
+
+        <!-- Tipo de Movimiento -->
+        <div class="form-group">
+          <label for="tipoMovimiento">Tipo de Movimiento *</label>
+          <select 
+            id="tipoMovimiento" 
+            [(ngModel)]="inventario.tipoMovimiento" 
+            name="tipoMovimiento"
+            (change)="calcularStockDespues()"
+            required
+          >
+            <option value="">-- Selecciona --</option>
+            <option *ngFor="let tipo of tiposMovimiento" [value]="tipo">
+              {{ tipo }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Cantidad -->
+        <div class="form-group">
+          <label for="cantidad">Cantidad *</label>
+          <input
+            id="cantidad"
+            type="number"
+            placeholder="0"
+            [(ngModel)]="inventario.cantidad"
+            name="cantidad"
+            (change)="calcularStockDespues()"
+            min="1"
+            required
+          >
+        </div>
+
+        <!-- Stock Antes -->
+        <div class="form-group">
+          <label for="stockAntes">Stock Antes</label>
+          <input
+            id="stockAntes"
+            type="number"
+            [(ngModel)]="inventario.stockAntes"
+            name="stockAntes"
+            readonly
+            disabled
+          >
+        </div>
+
+        <!-- Stock Después -->
+        <div class="form-group">
+          <label for="stockDespues">Stock Después</label>
+          <input
+            id="stockDespues"
+            type="number"
+            [(ngModel)]="inventario.stockDespues"
+            name="stockDespues"
+            readonly
+            disabled
+          >
+        </div>
+      </div>
+
+      <!-- Motivo (opcional) -->
+      <div class="form-group">
+        <label for="motivo">Motivo</label>
+        <input
+          id="motivo"
+          type="text"
+          placeholder="Ej: Reposición, Daño, Robo, etc."
+          [(ngModel)]="inventario.motivo"
+          name="motivo"
+        >
+      </div>
+
+      <!-- Observaciones -->
+      <div class="form-group">
+        <label for="observaciones">Observaciones</label>
+        <textarea
+          id="observaciones"
+          placeholder="Notas adicionales sobre el movimiento..."
+          [(ngModel)]="inventario.observaciones"
+          name="observaciones"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <!-- Botones -->
+      <div class="buttons-group">
+        <button type="submit" class="btn-primary">
+          ✅ {{ editando ? 'Actualizar' : 'Registrar' }} Movimiento
+        </button>
+        <button type="button" class="btn-secondary" (click)="limpiarFormulario()">
+          🔄 Limpiar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section">
+    <h2 class="section-title">🔍 Movimientos de Inventario</h2>
+    <input
+      type="text"
+      placeholder="Buscar por producto, tipo o observaciones..."
+      [(ngModel)]="searchTerm"
+      (input)="aplicarFiltros()"
+      class="search-input"
+    >
+  </section>
+
+  <!-- LIST SECTION -->
+  <section class="list-section">
+    <div class="table-wrapper" *ngIf="inventariosMostrados.length > 0; else noData">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Stock Antes</th>
+            <th>Stock Después</th>
+            <th>Fecha</th>
+            <th>Motivo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inv of inventariosMostrados">
+            <td>{{ getNombreProducto(inv.idProducto) }}</td>
+            <td>
+              <span [class]="'tipo-' + getClaseEstado(inv.tipoMovimiento)">
+                {{ inv.tipoMovimiento }}
+              </span>
+            </td>
+            <td class="cantidad">{{ inv.cantidad }}</td>
+            <td>{{ inv.stockAntes }}</td>
+            <td>{{ inv.stockDespues }}</td>
+            <td>{{ inv.fechaMovimiento | date: 'short' }}</td>
+            <td>{{ inv.motivo || '-' }}</td>
+            <td class="actions">
+              <button type="button" class="btn-edit" (click)="editar(inv)">✏️</button>
+              <button type="button" class="btn-delete" (click)="eliminar(inv.idInventario)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noData>
+      <div class="no-data">
+        <p>No hay movimientos de inventario registrados</p>
+      </div>
+    </ng-template>
+  </section>
+</div>

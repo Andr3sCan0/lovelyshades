@@ -21,7 +21,8 @@ export class ProductosComponent implements OnInit {
     nombre: '',
     descripcion: '',
     precio: 0,
-    stock: 0
+    stock: 0,
+    estado: true
   };
 
   editando = false;
@@ -88,7 +89,7 @@ export class ProductosComponent implements OnInit {
       !this.producto.nombre.trim() ||
       !this.producto.descripcion.trim()
     ) {
-      alert('Todos los campos son obligatorios');
+      alert('Nombre y descripción son obligatorios');
       return;
     }
 
@@ -132,7 +133,15 @@ export class ProductosComponent implements OnInit {
       nombre: '',
       descripcion: '',
       precio: 0,
-      stock: 0
+      stock: 0,
+      estado: true,
+      valorCosto: 0,
+      valorVenta: 0,
+      idMarca: undefined,
+      idCategoria: undefined,
+      codigoInterno: '',
+      color: '',
+      fechaIngreso: undefined
     };
     this.editando = false;
   }
